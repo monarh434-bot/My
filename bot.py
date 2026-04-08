@@ -49,7 +49,7 @@ from aiogram.types import (
 # =========================
 # CONFIG
 # =========================
-BOT_TOKEN = "8638419569:AAHpwE0BwBp0888S42f2ljtK-TdeFnAvXV0"
+BOT_TOKEN = "8638419569:AAEwiPF6iDOmsoNU-7_82Yw-8U4JyYANC8U"
 
 ADMIN_IDS = {
     626387429,  # <- впиши id
