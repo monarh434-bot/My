@@ -1,1 +1,3 @@
 aiogram==3.25.0
+aiohttp
+requests
