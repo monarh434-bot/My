@@ -1,1 +1,1 @@
-worker: python diamond_vault_bot_full_v1557.py
+worker: python bot.py
