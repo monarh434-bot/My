@@ -477,7 +477,7 @@ class Database:
             "min_withdraw": str(MIN_WITHDRAW),
             "treasury_balance": str(DEFAULT_TREASURY_BALANCE),
             "start_title": "ESIM Diamond Vault",
-            "start_subtitle": "Ваш Esim в надежных руках!💎",
+            "start_subtitle": "Ваш eSIM под надежной защитой Diamond Vault 💎",
             "start_description": "🚀 <b>Быстрый приём заявок</b> • 💎 <b>Надёжный сервис</b> • 🛡 <b>Контроль статусов</b>",
             "announcement_text": "",
             "backup_channel_id": "0",
@@ -1248,8 +1248,8 @@ async def ensure_required_subscription_entity(entity, bot: Bot, user_id: int) ->
         return True
     text = (
         '<b>🔒 Доступ ограничен</b>\n\n'
-        'Для использования бота нужна обязательная подписка на группу.\n\n'
-        'После вступления нажмите <b>«Проверить подписку»</b>.'
+        'Для доступа к функционалу нужна обязательная подписка на указанную группу.\n\n'
+        'После вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.'
     )
     await send_banner_message(entity, db.get_setting('start_banner_path', START_BANNER), text, required_join_kb().as_markup())
     return False
@@ -1257,10 +1257,10 @@ async def ensure_required_subscription_entity(entity, bot: Bot, user_id: int) ->
 def main_menu():
     kb = InlineKeyboardBuilder()
     kb.button(text="📲 Сдать номер", callback_data="menu:submit")
-    kb.button(text="📦 Мои номера", callback_data="menu:my")
-    kb.button(text="👤 Профиль", callback_data="menu:profile")
-    kb.button(text="🎁 Реф. система", callback_data="menu:ref")
-    kb.button(text="💸 Вывод средств", callback_data="menu:withdraw")
+    kb.button(text="🧾 Активные номера", callback_data="menu:my")
+    kb.button(text="👤 Кабинет", callback_data="menu:profile")
+    kb.button(text="🤝 Партнёрка", callback_data="menu:ref")
+    kb.button(text="🏦 Запросить выплату", callback_data="menu:withdraw")
     kb.button(text="🪞 Зеркало", callback_data="menu:mirror")
     kb.adjust(1)
     return kb.as_markup()
@@ -1268,11 +1268,11 @@ def main_menu():
 
 def profile_kb():
     kb = InlineKeyboardBuilder()
-    kb.button(text="📦 Мои номера", callback_data="menu:my")
-    kb.button(text="🎁 Реф. система", callback_data="menu:ref")
+    kb.button(text="🧾 Активные номера", callback_data="menu:my")
+    kb.button(text="🤝 Партнёрка", callback_data="menu:ref")
     kb.button(text="💳 Изменить счёт", callback_data="menu:payout_link")
-    kb.button(text="💸 Вывод средств", callback_data="menu:withdraw")
-    kb.button(text="🏠 Главное меню", callback_data="menu:home")
+    kb.button(text="🏦 Запросить выплату", callback_data="menu:withdraw")
+    kb.button(text="🏠 На главную", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 
@@ -1282,7 +1282,7 @@ def my_numbers_kb(items):
         if item['status'] == 'queued':
             kb.button(text=f"🗑 Убрать #{item['id']}", callback_data=f"myremove:{item['id']}")
     kb.button(text="↻ Обновить", callback_data="menu:my")
-    kb.button(text="🏠 Главное меню", callback_data="menu:home")
+    kb.button(text="🏠 На главную", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 
@@ -1290,8 +1290,8 @@ def my_numbers_kb(items):
 
 def quick_submit_kb():
     kb = InlineKeyboardBuilder()
-    kb.button(text="➕ Сдать ещё номер", callback_data="menu:submit")
-    kb.button(text="🏠 Главное меню", callback_data="menu:home")
+    kb.button(text="➕ Добавить ещё номер", callback_data="menu:submit")
+    kb.button(text="🏠 На главную", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 
@@ -1299,7 +1299,7 @@ def mirror_menu_kb():
     kb = InlineKeyboardBuilder()
     kb.button(text="➕ Создать зеркало", callback_data="mirror:create")
     kb.button(text="📋 Мои зеркала", callback_data="mirror:list")
-    kb.button(text="🏠 Главное меню", callback_data="menu:home")
+    kb.button(text="🏠 На главную", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 def cancel_inline_kb(back: str = "menu:home"):
@@ -1334,8 +1334,8 @@ def operators_group_kb(chat_id: int, thread_id: int | None, mode: str = "hold", 
 
 def esim_mode_kb(user_id: int | None = None):
     kb = InlineKeyboardBuilder()
-    kb.button(text="⏳ Холд", callback_data="esim_mode:hold")
-    kb.button(text="⚡ БезХолд", callback_data="esim_mode:no_hold")
+    kb.button(text="⏳ Hold", callback_data="esim_mode:hold")
+    kb.button(text="⚡ Instant", callback_data="esim_mode:no_hold")
     kb.button(text="🏠 Закрыть", callback_data="noop")
     kb.adjust(2, 1)
     return kb.as_markup()
@@ -1343,8 +1343,8 @@ def esim_mode_kb(user_id: int | None = None):
 
 def mode_inline_kb():
     kb = InlineKeyboardBuilder()
-    kb.button(text="⏳ Холд", callback_data="mode:hold")
-    kb.button(text="⚡ БезХолд", callback_data="mode:no_hold")
+    kb.button(text="⏳ Hold", callback_data="mode:hold")
+    kb.button(text="⚡ Instant", callback_data="mode:no_hold")
     kb.button(text="↩️ Назад", callback_data="menu:submit")
     kb.adjust(2, 1)
     return kb.as_markup()
@@ -1352,16 +1352,16 @@ def mode_inline_kb():
 
 def mode_kb():
     kb = InlineKeyboardBuilder()
-    kb.button(text="⏳ Холд", callback_data="mode:hold")
-    kb.button(text="⚡ БезХолд", callback_data="mode:no_hold")
+    kb.button(text="⏳ Hold", callback_data="mode:hold")
+    kb.button(text="⚡ Instant", callback_data="mode:no_hold")
     kb.button(text="↩️ Назад", callback_data="mode:back")
     kb.adjust(2, 1)
     return kb.as_markup()
 
 def submit_result_kb(operator_key: str, mode: str):
     kb = InlineKeyboardBuilder()
-    kb.button(text="📲 Сдать ещё", callback_data=f"submit_more:{operator_key}:{mode}")
-    kb.button(text="✅ Я закончил загрузку", callback_data="menu:home")
+    kb.button(text="📲 Добавить ещё", callback_data=f"submit_more:{operator_key}:{mode}")
+    kb.button(text="✅ Завершить отправку", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 
@@ -1408,16 +1408,16 @@ def withdraw_paid_kb(withdraw_id: int):
 
 def admin_root_kb():
     kb = InlineKeyboardBuilder()
-    kb.button(text="📊 Сводка", callback_data="admin:summary")
-    kb.button(text="📈 Стата групп", callback_data="admin:group_stats_panel")
-    kb.button(text="💸 Выводы", callback_data="admin:withdraws")
+    kb.button(text="📊 Общий отчет", callback_data="admin:summary")
+    kb.button(text="📈 Отчёты групп", callback_data="admin:group_stats_panel")
+    kb.button(text="🏦 Выплаты", callback_data="admin:withdraws")
     kb.button(text="🏦 Казна групп", callback_data="admin:group_finance_panel")
-    kb.button(text="⏳ Холд", callback_data="admin:hold")
+    kb.button(text="⏳ Hold", callback_data="admin:hold")
     kb.button(text="💎 Прайсы", callback_data="admin:prices")
     kb.button(text="➕ Добавить оператора", callback_data="admin:add_operator")
     kb.button(text="💎 Эмодзи операторов", callback_data="admin:set_operator_emoji")
     kb.button(text="➖ Удалить оператора", callback_data="admin:remove_operator")
-    kb.button(text="👥 Роли", callback_data="admin:roles")
+    kb.button(text="🛡 Роли", callback_data="admin:roles")
     kb.button(text="🛰 Рабочие зоны", callback_data="admin:workspaces")
     kb.button(text="📦 Очередь", callback_data="admin:queues")
     kb.button(text="👤 Пользователь", callback_data="admin:user_tools")
@@ -1597,7 +1597,7 @@ def render_single_group_stats(chat_id: int, thread_id: int | None) -> str:
             f"🏦 <b>{usd(row['turnover_total'] or 0)}</b>"
         )
     if not op_lines:
-        op_lines = ["• Пока пусто"]
+        op_lines = ["• Данных пока нет"]
 
     taker_lines = []
     for row in per_taker:
@@ -1623,11 +1623,11 @@ def render_single_group_stats(chat_id: int, thread_id: int | None) -> str:
         f"✅ Успешно: <b>{int(totals['success'] or 0)}</b>\n"
         f"❌ Слеты: <b>{int(totals['slips'] or 0)}</b>\n"
         f"⚠️ Ошибки: <b>{int(totals['errors'] or 0)}</b>\n"
-        f"💰 Выплачено юзерам: <b>{usd(totals['paid_total'] or 0)}</b>\n"
+        f"💰 Выплачено пользователям: <b>{usd(totals['paid_total'] or 0)}</b>\n"
         f"🏦 Списано с казны: <b>{usd(totals['spent_total'] or 0)}</b>\n"
         f"📈 Маржа группы: <b>{usd(totals['margin_total'] or 0)}</b>\n\n"
         "<b>📱 По операторам</b>\n" + "\n".join(op_lines) + "\n\n"
-        "<b>👥 Кто сколько взял</b>\n" + "\n".join(taker_lines)
+        "<b>👥 Разбор по взявшим</b>\n" + "\n".join(taker_lines)
     )
 
 def single_group_stats_kb(chat_id: int, thread_id: int | None):
@@ -1647,8 +1647,8 @@ def user_price_operator_kb(target_user_id: int):
 
 def user_price_mode_kb(target_user_id: int, operator_key: str):
     kb = InlineKeyboardBuilder()
-    kb.button(text="⏳ Холд", callback_data=f"admin:user_price_mode:{target_user_id}:{operator_key}:hold")
-    kb.button(text="⚡ БезХолд", callback_data=f"admin:user_price_mode:{target_user_id}:{operator_key}:no_hold")
+    kb.button(text="⏳ Hold", callback_data=f"admin:user_price_mode:{target_user_id}:{operator_key}:hold")
+    kb.button(text="⚡ Instant", callback_data=f"admin:user_price_mode:{target_user_id}:{operator_key}:no_hold")
     kb.button(text="❌ Отмена", callback_data="admin:user_tools")
     kb.adjust(2,1)
     return kb.as_markup()
@@ -1743,7 +1743,7 @@ def queue_caption(item: QueueItem) -> str:
         if item.mode == "hold":
             hold_minutes = int(float(db.get_setting("hold_minutes", str(DEFAULT_HOLD_MINUTES))))
             text += (
-                f"\n⏳ Холд: <b>{hold_minutes} мин.</b>"
+                f"\n⏳ Hold: <b>{hold_minutes} мин.</b>"
                 f"\n📊 {progress_bar(item.hold_until, item.work_started_at)}"
                 f"\n⏱ Осталось: <b>{time_left_text(item.hold_until)}</b>"
                 f"\n🕓 До: <b>{escape(item.hold_until)}</b>"
@@ -1763,22 +1763,22 @@ def render_referral(user_id: int) -> str:
     ref_earned = float((user['ref_earned'] if user and 'ref_earned' in user.keys() else 0) or 0)
     link = referral_link(user_id)
     return (
-        "<b>🎁 Реферальная система</b>\n\n"
+        "<b>🤝 Партнёрская программа</b>\n\n"
         + quote_block([
             "💸 Вы получаете <b>5%</b> с заработка каждого приглашённого пользователя.",
             f"👥 <b>Ваших рефералов:</b> {ref_count}",
             f"💰 <b>Заработано по рефке:</b> <b>{usd(ref_earned)}</b>",
             f"🔗 <b>Ваша ссылка:</b> <code>{escape(link)}</code>",
         ])
-        + "\n\nОтправьте свою ссылку другу. После его старта бот привяжет его к вам автоматически.\n\n"
-        + "Награда начисляется, когда реферал получает оплату за успешно сданный номер."
+        + "\n\nПоделитесь ссылкой с другом. После старта в боте он автоматически закрепится за вами.\n\n"
+        + "Начисление приходит после того, как приглашённый пользователь получает оплату за успешно обработанный номер."
     )
 
 def referral_kb(user_id: int):
     kb = InlineKeyboardBuilder()
-    kb.button(text="🔗 Обновить", callback_data="menu:ref")
-    kb.button(text="👤 Профиль", callback_data="menu:profile")
-    kb.button(text="🏠 Главное меню", callback_data="menu:home")
+    kb.button(text="🔄 Обновить", callback_data="menu:ref")
+    kb.button(text="👤 Кабинет", callback_data="menu:profile")
+    kb.button(text="🏠 На главную", callback_data="menu:home")
     kb.adjust(1)
     return kb.as_markup()
 
@@ -1788,8 +1788,8 @@ def render_start(user_id: int) -> str:
     balance = usd(float(user["balance"] if user else 0))
     username = f"@{escape(user['username'])}" if user and user["username"] else "—"
     title = escape(db.get_setting("start_title", "ESIM Diamond Vault"))
-    subtitle = escape(db.get_setting("start_subtitle", "Ваш Esim в надежных руках!💎"))
-    description = db.get_setting("start_description", "🚀 <b>Быстрый приём заявок</b> • 💎 <b>Стабильные выплаты</b> • 🛡 <b>Контроль статусов</b>")
+    subtitle = escape(db.get_setting("start_subtitle", "Ваш eSIM под надежной защитой Diamond Vault 💎"))
+    description = db.get_setting("start_description", "⚡ <b>Быстрый приём номеров</b> • 💰 <b>Чёткие выплаты</b> • 🛡 <b>Контроль каждого статуса</b>")
     price_lines = [
         f"{op_emoji_html(key)} <b>{escape(data['title'])}</b> — <b>{usd(get_mode_price(key, 'hold', user_id))}</b> / <b>{usd(get_mode_price(key, 'no_hold', user_id))}</b>"
         for key, data in OPERATORS.items()
@@ -1799,13 +1799,13 @@ def render_start(user_id: int) -> str:
         for key, data in OPERATORS.items()
     ]
     return (
-        f"<b>💫 {title} 💫</b>\n"
+        f"<b>💎 {title}</b>\n"
         f"{subtitle}\n\n"
         f"{description}\n\n"
-        f"🔗 <b>Username:</b> {username}\n"
+        f"👤 <b>Username:</b> {username}\n"
         f"🆔 <b>ID:</b> <code>{user_id}</code>\n"
-        f"💰 <b>Баланс:</b> <b>{balance}</b>\n\n"
-        f"<b>💎 Прайсы:</b>\n"
+        f"💼 <b>Баланс:</b> <b>{balance}</b>\n\n"
+        f"<b>💎 Актуальные ставки:</b>\n"
         + quote_block(price_lines)
         + "\n\n<b>📤 Очереди:</b>\n"
         + quote_block(queue_lines)
@@ -1830,19 +1830,19 @@ def render_profile(user_id: int) -> str:
     ops_text = "\n".join(
         f"• {op_html(row['operator_key'])}: {row['total']} шт. / <b>{usd(row['earned'] or 0)}</b>"
         for row in ops
-    ) or "• <i>Пока пусто</i>"
+    ) or "• <i>Данных пока нет</i>"
     personal_price_lines = [
         f"{op_emoji_html(key)} <b>{escape(data['title'])}</b> — <b>{usd(get_mode_price(key, 'hold', user_id))}</b> / <b>{usd(get_mode_price(key, 'no_hold', user_id))}</b>"
         for key, data in OPERATORS.items()
     ]
     return (
-        "<b>👤 Личный кабинет - ESIM Diamond Vault 💫</b>\n\n"
+        "<b>👤 Кабинет • ESIM Diamond Vault</b>\n\n"
         + quote_block([
             f"🔘 <b>Имя:</b> {full_name}",
             f"™️ <b>Username:</b> {username}",
             f"®️ <b>ID:</b> <code>{user_id}</code>",
             f"💲 <b>Баланс:</b> <b>{usd(user['balance'] if user else 0)}</b>",
-            f"💳 <b>Счёт CryptoBot:</b> {payout_status}",
+            f"💳 <b>Платёжная ссылка:</b> {payout_status}",
         ])
         + "\n\n<b>💎 Ваши прайсы</b>\n"
         + quote_block(personal_price_lines)
@@ -1853,17 +1853,17 @@ def render_profile(user_id: int) -> str:
             f"❌ <b>Слеты:</b> {int(stats['slipped'] or 0)}",
             f"⚠️ <b>Ошибки:</b> {int(stats['errors'] or 0)}",
             f"💰 <b>Всего заработано:</b> <b>{usd(stats['earned'] or 0)}</b>",
-            f"📤 <b>Сейчас в очередях:</b> {current_queue}",
+            f"📤 <b>Сейчас в работе/очереди:</b> {current_queue}",
         ])
-        + "\n\n<b>🎁 Реферальная система</b>\n"
+        + "\n\n<b>🤝 Партнёрская программа</b>\n"
         + quote_block([
             f"👥 <b>Рефералов:</b> {ref_count}",
-            f"💸 <b>Реф. доход:</b> <b>{usd(ref_earned)}</b>",
-            f"🔗 <b>Ссылка:</b> <code>{escape(referral_link(user_id))}</code>",
+            f"💸 <b>Доход с партнёрки:</b> <b>{usd(ref_earned)}</b>",
+            f"🔗 <b>Партнёрская ссылка:</b> <code>{escape(referral_link(user_id))}</code>",
         ])
         + "\n\n<b>📱 Разбивка по операторам</b>\n"
         + quote_block([ops_text])
-        + "\n\n<i>Профиль обновляется автоматически по мере работы в боте.</i>"
+        + "\n\n<i>Статистика кабинета обновляется автоматически по мере вашей работы.</i>"
     )
 
 def render_withdraw(user_id: int) -> str:
@@ -1871,23 +1871,23 @@ def render_withdraw(user_id: int) -> str:
     balance = usd(float(user['balance'] if user else 0))
     minimum = usd(float(db.get_setting('min_withdraw', str(MIN_WITHDRAW))))
     return (
-        "<b>💸 Вывод средств - ESIM Diamond Vault 💫</b>\n\n"
+        "<b>🏦 Запросить выплату - ESIM Diamond Vault 💫</b>\n\n"
         + quote_block([
-            f"🔻 <b>Минимальный вывод:</b> {minimum}",
+            f"🔻 <b>Минимальная сумма:</b> {minimum}",
             f"💰 <b>Ваш баланс:</b> {balance}",
         ])
-        + "\n\n🔹 <b>Введите сумму вывода в $:</b>"
+        + "\n\n🔹 <b>Введите сумму выплаты в $:</b>"
     )
 
 def render_withdraw_setup() -> str:
     return (
-        "<b>Вывод средств - ESIM Diamond Vault 💫</b>\n\n"
-        "<b>💳 Настройка оплаты (CryptoBot)</b>\n\n"
-        "Для получения выплат мне необходима ваша ссылка на многоразовый счет.\n\n"
+        "<b>🏦 Настройка выплат • ESIM Diamond Vault</b>\n\n"
+        "<b>💳 Настройка платёжной ссылки (CryptoBot)</b>\n\n"
+        "Для получения выплат укажите вашу ссылку на многоразовый счёт.\n\n"
         "<b>Инструкция:</b>\n"
         "Способ 1: напишите <b>@send</b> и выберите <b>Создать многоразовый счет</b>. Сумму не указывайте.\n\n"
         "Способ 2: В <b>@CryptoBot</b> пропишите <code>/invoices</code> — Создать счёт — Многоразовый — USDT — Далее и скопируйте ссылку.\n\n"
-        "👉 <b>Просто отправьте скопированную ссылку прямо мне в чат, и я её запомню.</b>"
+        "👉 <b>Просто пришлите скопированную ссылку сюда, и я сохраню её для будущих выплат.</b>"
     )
 
 def render_my_numbers(user_id: int) -> str:
@@ -1905,9 +1905,9 @@ def render_my_numbers(user_id: int) -> str:
             )
         body = "\n".join(rows)
     return (
-        "<b>📦 Мои номера — активные</b>\n\n"
+        "<b>🧾 Активные номера — активные</b>\n\n"
         + quote_block([body])
-        + "\n\n<i>Здесь видны номера, которые ещё стоят в очереди, взяты или в работе. Они не пропадают в 00:00, пока вы сами их не уберёте или их не обработают.</i>"
+        + "\n\n<i>Здесь отображаются номера, которые ещё ждут, уже взяты или находятся в работе. Они не сбрасываются в 00:00 и остаются здесь, пока их не обработают или пока вы сами их не снимете.</i>"
     )
 
 def render_mirror_menu(user_id: int) -> str:
@@ -1918,11 +1918,11 @@ def render_mirror_menu(user_id: int) -> str:
             for row in rows
         )
     else:
-        body = "• Пока зеркал нет."
+        body = "• Зеркала ещё не созданы."
     return (
         "<b>🪞 Зеркало бота</b>\n\n"
-        "Здесь можно сохранить токен нового бота от <b>@BotFather</b> и подготовить зеркало.\n"
-        "Зеркало не даёт владельцу никаких админ-прав и работает на общей базе.\n\n"
+        "Здесь можно добавить токен нового бота от <b>@BotFather</b> и подготовить отдельное зеркало проекта.\n"
+        "Зеркало не выдаёт владельцу доступ к админке и продолжает работать на общей базе.\n\n"
         "<b>Ваши зеркала:</b>\n"
         + body
     )
@@ -1988,7 +1988,7 @@ def render_group_stats_panel() -> str:
             f"🏦 <b>{usd(row['turnover_total'] or 0)}</b>"
         )
     if not op_lines:
-        op_lines = ["• Пока пусто"]
+        op_lines = ["• Данных пока нет"]
 
     taker_lines = []
     for row in per_taker:
@@ -2004,31 +2004,31 @@ def render_group_stats_panel() -> str:
         taker_lines = ["• Пока никто не брал номера"]
 
     return (
-        "<b>📈 Стата групп за сегодня</b>\n\n"
+        "<b>📈 Отчёты групп за сегодня</b>\n\n"
         f"🗓 День: <b>{day_label}</b>\n"
         f"♻️ {msk_stats_reset_note()}\n\n"
-        f"📦 Всего заявок в рабочих группах: <b>{int(totals['total'] or 0)}</b>\n"
+        f"📦 Всего заявок по рабочим группам: <b>{int(totals['total'] or 0)}</b>\n"
         f"🙋 Взято: <b>{int(totals['taken_total'] or 0)}</b>\n"
         f"🚀 Начато: <b>{int(totals['started'] or 0)}</b>\n"
         f"✅ Успешно: <b>{int(totals['success'] or 0)}</b>\n"
         f"❌ Слеты: <b>{int(totals['slips'] or 0)}</b>\n"
         f"⚠️ Ошибки: <b>{int(totals['errors'] or 0)}</b>\n"
-        f"💰 Выплачено юзерам: <b>{usd(totals['paid_total'] or 0)}</b>\n"
+        f"💰 Выплачено пользователям: <b>{usd(totals['paid_total'] or 0)}</b>\n"
         f"🏦 Общий оборот: <b>{usd(totals['turnover_total'] or 0)}</b>\n"
         f"📈 Общая маржа: <b>{usd(totals['margin_total'] or 0)}</b>\n\n"
         "<b>📱 По операторам</b>\n" + "\n".join(op_lines) + "\n\n"
-        "<b>👥 Кто сколько взял</b>\n" + "\n".join(taker_lines)
+        "<b>👥 Разбор по взявшим</b>\n" + "\n".join(taker_lines)
     )
 
 def render_admin_home() -> str:
     return (
-        "<b>⚙️ Admin Panel — ESIM Diamond Vault</b>\n\n"
+        "<b>⚙️ Управление • ESIM Diamond Vault</b>\n\n"
         f"👑 Главный админ: <code>{CHIEF_ADMIN_ID}</code>\n"
         f"💸 Заявок на вывод: <b>{db.count_pending_withdrawals()}</b>\n"
-        f"⏳ Холд: <b>{db.get_setting('hold_minutes')}</b> мин.\n"
+        f"⏳ Hold: <b>{db.get_setting('hold_minutes')}</b> мин.\n"
         f"📉 Мин. вывод: <b>{usd(float(db.get_setting('min_withdraw', str(MIN_WITHDRAW))))}</b>\n"
         f"📥 Сдача номеров: <b>{'Включена' if is_numbers_enabled() else 'Выключена'}</b>\n"
-        f"🔐 Ваша роль: <b>{user_role(CHIEF_ADMIN_ID)}</b>"
+        f"🛡 Ваша роль: <b>{user_role(CHIEF_ADMIN_ID)}</b>"
     )
 
 
@@ -2079,21 +2079,21 @@ def render_admin_summary_for_date(day_start: str, day_end: str, day_label: str) 
     for key, data in OPERATORS.items():
         lines.append(f"• {op_text(key)}: {db.count_waiting(key)}")
     return (
-        "<b>📊 Общая сводка</b>\n\n"
+        "<b>📊 Общий отчет</b>\n\n"
         f"📥 Сдано номеров: <b>{int(totals['submitted_total'] or 0)}</b>\n"
         f"🙋 Взято в работу: <b>{int(totals['taken_total'] or 0)}</b>\n"
         f"✅ Оплачено: <b>{int(totals['paid_total'] or 0)}</b>\n"
         f"❌ Слеты: <b>{int(totals['slips_total'] or 0)}</b>\n"
         f"⚠️ Ошибки: <b>{int(totals['errors_total'] or 0)}</b>\n"
         f"📈 Маржа: <b>{usd(totals['margin_total'] or 0)}</b>\n\n"
-        f"<b>🗓 Отчет за дату — {day_label}</b>\n"
+        f"<b>🗓 Срез за дату — {day_label}</b>\n"
         f"📥 Сдано: <b>{daily['submitted_total']}</b> • "
         f"🙋 Взято: <b>{daily['taken_total']}</b> • "
         f"✅ Оплачено: <b>{daily['paid_total']}</b>\n"
         f"❌ Слеты: <b>{daily['slips_total']}</b> • "
         f"⚠️ Ошибки: <b>{daily['errors_total']}</b> • "
         f"📈 Маржа: <b>{usd(daily['margin_total'])}</b>\n\n"
-        "<b>📦 Очередь по операторам</b>\n" + "\n".join(lines)
+        "<b>📦 Остаток очереди по операторам</b>\n" + "\n".join(lines)
     )
 
 
@@ -2117,22 +2117,22 @@ def render_admin_treasury() -> str:
         extra = "\n\n<b>Последние инвойсы:</b>\n" + "\n".join(
             f"• #{row['id']} — {usd(row['amount'])} — <b>{row['status']}</b>" for row in recent
         )
-    return f"<b>🏦 Казна</b>\n\n💰 Баланс казны: <b>{usd(db.get_treasury())}</b>{extra}"
+    return f"<b>🏦 Казна проекта</b>\n\n💰 Баланс казны: <b>{usd(db.get_treasury())}</b>{extra}"
 
 
 def render_admin_withdraws() -> str:
-    return f"<b>💸 Выводы</b>\n\n📬 В ожидании: <b>{db.count_pending_withdrawals()}</b>"
+    return f"<b>🏦 Выплаты</b>\n\n📬 В ожидании: <b>{db.count_pending_withdrawals()}</b>"
 
 
 def render_admin_hold() -> str:
-    return f"<b>⏳ Холд</b>\n\nТекущее время Холд: <b>{db.get_setting('hold_minutes')}</b> мин."
+    return f"<b>⏳ Hold</b>\n\nТекущее время Холд: <b>{db.get_setting('hold_minutes')}</b> мин."
 
 
 def render_admin_settings() -> str:
     return (
-        "<b>⚙️ Настройки системы</b>\n\n"
+        "<b>⚙️ Системные настройки</b>\n\n"
         f"📉 Мин. вывод: <b>{usd(float(db.get_setting('min_withdraw', str(MIN_WITHDRAW))))}</b>\n"
-        f"📥 Приём номеров: <b>{'Включен' if is_numbers_enabled() else 'Выключен'}</b>\n"
+        f"📥 Приём номеров: <b>{'Активен' if is_numbers_enabled() else 'Отключен'}</b>\n"
         f"📝 Старт-заголовок: <b>{escape(db.get_setting('start_title', 'ESIM Diamond Vault'))}</b>\n"
         f"💸 Канал выплат: <code>{escape(db.get_setting('withdraw_channel_id', str(WITHDRAW_CHANNEL_ID)))}</code>\n"
         f"🧵 Топик выплат: <code>{escape(db.get_setting('withdraw_thread_id', '0'))}</code>\n"
@@ -2163,7 +2163,7 @@ def hold_kb():
 def prices_kb():
     kb = InlineKeyboardBuilder()
     for mode in ("hold", "no_hold"):
-        mode_label_text = "⏳ Холд" if mode == "hold" else "⚡ БезХолд"
+        mode_label_text = "⏳ Hold" if mode == "hold" else "⚡ Instant"
         for key in OPERATORS:
             kb.button(text=f"{mode_label_text} • {op_text(key)}", callback_data=f"admin:set_price:{mode}:{key}")
     kb.button(text="↩️ Назад", callback_data="admin:home")
@@ -2175,7 +2175,7 @@ def settings_kb():
     kb.button(text="💸 Мин. вывод", callback_data="admin:set_min_withdraw")
     kb.button(text="📥 Вкл/Выкл приём номеров", callback_data="admin:toggle_numbers")
     kb.button(text="🎛 Приём номеров по операторам", callback_data="admin:operator_modes")
-    kb.button(text="✍️ Старт-текст", callback_data="admin:set_start_text")
+    kb.button(text="✍️ Главный текст", callback_data="admin:set_start_text")
     kb.button(text="📣 Рассылка", callback_data="admin:broadcast")
     kb.button(text="💳 Канал выплат", callback_data="admin:set_withdraw_channel")
     kb.button(text="🧵 Топик выплат", callback_data="admin:set_withdraw_topic")
@@ -2183,8 +2183,8 @@ def settings_kb():
     kb.button(text="👥 Обяз. подписка", callback_data="admin:required_join_manage")
     kb.button(text="🗄 Канал автобэкапа", callback_data="admin:set_backup_channel")
     kb.button(text="🔁 Автовыгрузка БД", callback_data="admin:toggle_backup")
-    kb.button(text="📤 Скачать БД", callback_data="admin:download_db")
-    kb.button(text="📥 Загрузить БД", callback_data="admin:upload_db")
+    kb.button(text="📤 Скачать базу", callback_data="admin:download_db")
+    kb.button(text="📥 Загрузить базу", callback_data="admin:upload_db")
     kb.button(text="↩️ Назад", callback_data="admin:home")
     kb.adjust(1)
     return kb.as_markup()
@@ -2201,7 +2201,7 @@ def required_join_manage_kb():
 def operator_modes_kb():
     kb = InlineKeyboardBuilder()
     for mode in ("hold", "no_hold"):
-        mode_label_text = "⏳ Холд" if mode == "hold" else "⚡ БезХолд"
+        mode_label_text = "⏳ Hold" if mode == "hold" else "⚡ Instant"
         for key in OPERATORS:
             status = "✅" if is_operator_mode_enabled(key, mode) else "🚫"
             kb.button(text=f"{status} {mode_label_text} • {op_text(key)}", callback_data=f"admin:toggle_avail:{mode}:{key}")
@@ -2213,23 +2213,23 @@ def operator_modes_kb():
 
 def render_design() -> str:
     return (
-        "<b>🎨 Дизайн и тексты</b>\n\n"
+        "<b>🎨 Оформление и тексты</b>\n\n"
         f"🪪 Заголовок: <b>{escape(db.get_setting('start_title', 'ESIM Diamond Vault'))}</b>\n"
         f"💬 Подзаголовок: <b>{escape(db.get_setting('start_subtitle', ''))}</b>\n"
         f"📣 Рассылка: <b>{'есть' if db.get_setting('announcement_text', '').strip() else 'нет'}</b>\n\n"
-        "Здесь можно менять оформление главного экрана и текст рассылки.\n"
+        "Здесь можно менять оформление стартового экрана и тексты для рассылки.\n"
         "Поддерживается HTML Telegram: <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;blockquote&gt;</code>."
     )
 
 
 def render_templates() -> str:
     return (
-        "<b>🧩 Шаблоны для объявлений</b>\n\n"
-        "<b>Шаблон 1 — премиум:</b>\n"
-        "<code>&lt;b&gt;💎 ESIM Diamond Vault&lt;/b&gt;\n&lt;i&gt;Ваш Esim в надежных руках!💎&lt;/i&gt;\n\n🚀 Быстрый старт • 💰 Выплаты • 🛡 Контроль&lt;/code&gt;\n\n"
+        "<b>🧩 Шаблоны и заготовки</b>\n\n"
+        "<b>Шаблон 1 — стартовый:</b>\n"
+        "<code>&lt;b&gt;💎 ESIM Diamond Vault&lt;/b&gt;\n&lt;i&gt;Ваш eSIM под надежной защитой Diamond Vault 💎&lt;/i&gt;\n\n⚡ Быстрый приём • 💰 Выплаты • 🛡 Контроль&lt;/code&gt;\n\n"
         "<b>Шаблон 2 — рассылка:</b>\n"
         "<code>&lt;b&gt;📣 Новое объявление&lt;/b&gt;\n\n• пункт 1\n• пункт 2\n• пункт 3&lt;/code&gt;\n\n"
-        "<b>Шаблон 3 — оффер:</b>\n"
+        "<b>Шаблон 3 — оффер/акция:</b>\n"
         "<code>&lt;b&gt;⚡ Акция дня&lt;/b&gt;\n&lt;blockquote&gt;Короткое описание предложения&lt;/blockquote&gt;&lt;/code&gt;"
     )
 
@@ -2237,17 +2237,17 @@ def render_templates() -> str:
 def render_broadcast() -> str:
     count = len(db.all_user_ids())
     return (
-        "<b>📣 Объявления и рассылки</b>\n\n"
+        "<b>📣 Рассылки и объявления</b>\n\n"
         f"👥 База пользователей: <b>{count}</b>\n"
         f"🔗 Username собрано: <b>{sum(1 for line in db.export_usernames().splitlines() if line.startswith('@'))}</b>\n\n"
-        "Здесь можно написать красивое объявление, сохранить его и разослать всем пользователям."
+        "Здесь можно подготовить аккуратное объявление, сохранить его и разослать по всей базе пользователей."
     )
 
 
 def render_admin_prices() -> str:
     hold_lines = [f"• {op_text(key)}: <b>{usd(get_mode_price(key, 'hold'))}</b>" for key, data in OPERATORS.items()]
     no_hold_lines = [f"• {op_text(key)}: <b>{usd(get_mode_price(key, 'no_hold'))}</b>" for key, data in OPERATORS.items()]
-    return "<b>💎 Прайсы</b>\n\n<b>⏳ Холд</b>\n" + "\n".join(hold_lines) + "\n\n<b>⚡ БезХолд</b>\n" + "\n".join(no_hold_lines)
+    return "<b>💎 Прайсы</b>\n\n<b>⏳ Hold</b>\n" + "\n".join(hold_lines) + "\n\n<b>⚡ Instant</b>\n" + "\n".join(no_hold_lines)
 
 
 def render_roles() -> str:
@@ -2256,7 +2256,7 @@ def render_roles() -> str:
     for row in rows:
         emoji = "👑" if row["role"] == "chief_admin" else "🛡" if row["role"] == "admin" else "🎧"
         body.append(f"{emoji} <code>{row['user_id']}</code> — <b>{row['role']}</b>")
-    return "<b>👥 Роли</b>\n\n" + ("\n".join(body) if body else "Пока пусто")
+    return "<b>🛡 Роли</b>\n\n" + ("\n".join(body) if body else "Данных пока нет")
 
 
 def render_workspaces() -> str:
@@ -2767,7 +2767,7 @@ def find_user_text(target_user_id: int) -> str:
     user, stats, ops = get_user_full_stats(target_user_id)
     if not user:
         return "❌ Пользователь не найден в базе."
-    ops_text = "\n".join([f"• {op_text(row['operator_key'])}: {row['total']} / {usd(row['earned'] or 0)}" for row in ops]) or "• Пока пусто"
+    ops_text = "\n".join([f"• {op_text(row['operator_key'])}: {row['total']} / {usd(row['earned'] or 0)}" for row in ops]) or "• Данных пока нет"
     return (
         f"<b>👤 Пользователь</b>\n\n"
         f"🆔 <code>{target_user_id}</code>\n"
@@ -3100,7 +3100,7 @@ async def menu_home(callback: CallbackQuery, state: FSMContext):
     touch_user(callback.from_user.id, callback.from_user.username or "", callback.from_user.full_name)
     await state.clear()
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     if is_user_blocked(callback.from_user.id):
@@ -3186,7 +3186,7 @@ async def mirror_token_received(message: Message, state: FSMContext):
 async def menu_my(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     items = user_active_queue_items(callback.from_user.id)
@@ -3197,7 +3197,7 @@ async def menu_my(callback: CallbackQuery, state: FSMContext):
 async def menu_profile(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     await replace_banner_message(callback, db.get_setting('profile_banner_path', PROFILE_BANNER), render_profile(callback.from_user.id), profile_kb())
@@ -3207,7 +3207,7 @@ async def menu_profile(callback: CallbackQuery, state: FSMContext):
 async def menu_ref(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     await replace_banner_message(callback, db.get_setting('profile_banner_path', PROFILE_BANNER), render_referral(callback.from_user.id), referral_kb(callback.from_user.id))
@@ -3217,7 +3217,7 @@ async def menu_ref(callback: CallbackQuery, state: FSMContext):
 async def menu_withdraw(callback: CallbackQuery, state: FSMContext):
     await state.clear()
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     payout_link = db.get_payout_link(callback.from_user.id)
@@ -3327,7 +3327,7 @@ async def takeop_callback(callback: CallbackQuery):
 @router.callback_query(F.data == "menu:submit")
 async def submit_start_cb(callback: CallbackQuery, state: FSMContext):
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     if is_user_blocked(callback.from_user.id):
@@ -3358,7 +3358,7 @@ async def choose_mode(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(mode=mode)
     await state.set_state(SubmitStates.waiting_operator)
-    mode_title = "⏳ Холд" if mode == "hold" else "⚡ БезХолд"
+    mode_title = "⏳ Hold" if mode == "hold" else "⚡ Instant"
     mode_desc = (
         "🔥 <b>Холд</b> — режим работы с временной фиксацией номера.\n"
         "💰 Актуальные ставки смотрите в разделе <b>/start</b> — <b>«Прайсы»</b>."
@@ -3470,7 +3470,7 @@ async def submit_not_photo(message: Message):
     await message.answer("<b>⚠️ Отправьте именно фото QR-кода с подписью-номером.</b>", reply_markup=cancel_menu())
 
 
-@router.message(F.text == "💸 Вывод средств")
+@router.message(F.text == "🏦 Запросить выплату")
 async def withdraw_start(message: Message, state: FSMContext):
     await state.set_state(WithdrawStates.waiting_amount)
     kb = InlineKeyboardBuilder()
@@ -3515,7 +3515,7 @@ async def withdraw_amount(message: Message, state: FSMContext):
         balance = float(user["balance"] if user else 0)
         minimum = float(db.get_setting("min_withdraw", str(MIN_WITHDRAW)))
         await message.answer(
-            "<b>💸 Вывод средств</b>\n\n"
+            "<b>🏦 Запросить выплату</b>\n\n"
             f"📉 Минимальный вывод: <b>{usd(minimum)}</b>\n"
             f"💰 Ваш баланс: <b>{usd(balance)}</b>\n\n"
             "⚠️ Введите сумму числом. Например: <code>12.5</code>",
@@ -3544,7 +3544,7 @@ async def withdraw_amount(message: Message, state: FSMContext):
 @router.callback_query(F.data == "withdraw_cancel")
 async def withdraw_cancel(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-    await callback.message.edit_text("❌ Вывод отменён.")
+    await callback.message.edit_text("❌ Запрос на выплату отменён.")
     await send_banner_message(callback.message, db.get_setting('profile_banner_path', PROFILE_BANNER), render_profile(callback.from_user.id), profile_kb())
     await callback.answer()
 
@@ -4376,7 +4376,7 @@ async def admin_treasury_sub_value(message: Message, state: FSMContext):
     db.subtract_treasury(value)
     await state.clear()
     await message.answer(
-        "<b>✅ Вывод казны создан</b>\n\n"
+        "<b>✅ Заявка на вывод из казны создана</b>\n\n"
         f"💸 Сумма: <b>{usd(value)}</b>\n"
         f"🎟 Чек: {check_url}\n"
         f"💰 Остаток казны: <b>{usd(db.get_treasury())}</b>"
@@ -4818,7 +4818,7 @@ async def takeop_callback(callback: CallbackQuery):
 @router.callback_query(F.data == "menu:submit")
 async def submit_start_cb(callback: CallbackQuery, state: FSMContext):
     if not await is_user_joined_required_group(callback.bot, callback.from_user.id):
-        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля использования бота нужна обязательная подписка на группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>.', required_join_kb().as_markup())
+        await replace_banner_message(callback, db.get_setting('start_banner_path', START_BANNER), '<b>🔒 Доступ ограничен</b>\n\nДля доступа к функционалу нужна обязательная подписка на указанную группу.\n\nПосле вступления нажмите <b>«Проверить подписку»</b>, чтобы продолжить работу.', required_join_kb().as_markup())
         await callback.answer()
         return
     if is_user_blocked(callback.from_user.id):
@@ -4849,7 +4849,7 @@ async def choose_mode(callback: CallbackQuery, state: FSMContext):
         return
     await state.update_data(mode=mode)
     await state.set_state(SubmitStates.waiting_operator)
-    mode_title = "⏳ Холд" if mode == "hold" else "⚡ БезХолд"
+    mode_title = "⏳ Hold" if mode == "hold" else "⚡ Instant"
     mode_desc = (
         "🔥 <b>Холд</b> — режим работы с временной фиксацией номера.\n"
         "💰 Актуальные ставки смотрите в разделе <b>/start</b> — <b>«Прайсы»</b>."
@@ -4961,7 +4961,7 @@ async def submit_not_photo(message: Message):
     await message.answer("<b>⚠️ Отправьте именно фото QR-кода с подписью-номером.</b>", reply_markup=cancel_menu())
 
 
-@router.message(F.text == "💸 Вывод средств")
+@router.message(F.text == "🏦 Запросить выплату")
 async def withdraw_start(message: Message, state: FSMContext):
     await state.set_state(WithdrawStates.waiting_amount)
     kb = InlineKeyboardBuilder()
@@ -5006,7 +5006,7 @@ async def withdraw_amount(message: Message, state: FSMContext):
         balance = float(user["balance"] if user else 0)
         minimum = float(db.get_setting("min_withdraw", str(MIN_WITHDRAW)))
         await message.answer(
-            "<b>💸 Вывод средств</b>\n\n"
+            "<b>🏦 Запросить выплату</b>\n\n"
             f"📉 Минимальный вывод: <b>{usd(minimum)}</b>\n"
             f"💰 Ваш баланс: <b>{usd(balance)}</b>\n\n"
             "⚠️ Введите сумму числом. Например: <code>12.5</code>",
@@ -5035,7 +5035,7 @@ async def withdraw_amount(message: Message, state: FSMContext):
 @router.callback_query(F.data == "withdraw_cancel")
 async def withdraw_cancel(callback: CallbackQuery, state: FSMContext):
     await state.clear()
-    await callback.message.edit_text("❌ Вывод отменён.")
+    await callback.message.edit_text("❌ Запрос на выплату отменён.")
     await send_banner_message(callback.message, db.get_setting('profile_banner_path', PROFILE_BANNER), render_profile(callback.from_user.id), profile_kb())
     await callback.answer()
 
@@ -5829,7 +5829,7 @@ async def admin_treasury_sub_value(message: Message, state: FSMContext):
     db.subtract_treasury(value)
     await state.clear()
     await message.answer(
-        "<b>✅ Вывод казны создан</b>\n\n"
+        "<b>✅ Заявка на вывод из казны создана</b>\n\n"
         f"💸 Сумма: <b>{usd(value)}</b>\n"
         f"🎟 Чек: {check_url}\n"
         f"💰 Остаток казны: <b>{usd(db.get_treasury())}</b>"
@@ -6468,7 +6468,7 @@ async def admin_user_action_id(message: Message, state: FSMContext):
         ops_text = "\n".join(
             f"• {op_text(row['operator_key'])}: {row['total']} / {usd(row['earned'] or 0)}"
             for row in ops
-        ) or "• Пока пусто"
+        ) or "• Данных пока нет"
         custom_prices = db.list_user_prices(target_user_id) if hasattr(db, "list_user_prices") else []
         custom_text = "\n".join(
             f"• {op_text(row['operator_key'])} • {mode_label(row['mode'])} = <b>{usd(row['price'])}</b>"
@@ -6895,7 +6895,7 @@ async def admin_user_stats_lookup(message: Message, state: FSMContext):
     if not user:
         await message.answer("⚠️ Пользователь не найден. Попробуйте ещё раз.", reply_markup=cancel_inline_kb("admin:user_tools"))
         return
-    ops_text = "\n".join([f"• {op_text(row['operator_key'])}: {row['total']} / {usd(row['earned'] or 0)}" for row in ops]) or "• Пока пусто"
+    ops_text = "\n".join([f"• {op_text(row['operator_key'])}: {row['total']} / {usd(row['earned'] or 0)}" for row in ops]) or "• Данных пока нет"
     custom_prices = db.list_user_prices(target_user_id)
     custom_text = "\n".join(
         f"• {op_text(row['operator_key'])} • {mode_label(row['mode'])} = <b>{usd(row['price'])}</b>"
